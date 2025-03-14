@@ -3,6 +3,7 @@ lock "~> 3.18.0"
 
 set :application, "ticket"
 set :repo_url, "git@github.com:jbdt/ticket.git"
+set :assets_roles, [] # Evita que Capistrano ejecute precompilación de assets
 
 # Deploy to the user's home directory
 set :deploy_to, "/home/deploy/#{fetch :application}"
