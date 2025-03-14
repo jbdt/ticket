@@ -1,0 +1,30 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                        :bigint           not null, primary key
+#  admin                     :boolean          default(FALSE), not null
+#  alias_code                :string
+#  email                     :string
+#  password_digest           :string
+#  remember_token            :string
+#  remember_token_expires_at :datetime
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#
+
+one:
+  email: MyString
+  password_digest: MyString
+  first_name: MyString
+  last_name: MyString
+  remember_token: MyString
+  remember_token_expires_at: 2025-01-02 14:47:00
+
+two:
+  email: MyString
+  password_digest: MyString
+  first_name: MyString
+  last_name: MyString
+  remember_token: MyString
+  remember_token_expires_at: 2025-01-02 14:47:00
