@@ -84,6 +84,6 @@
   #
   production:
     <<: *default
-    database: ticket_production
+    database: ticket
     username: <%= ENV['DATABASE_USERNAME'] %>
     password: <%= ENV['DATABASE_PASSWORD'] %>
