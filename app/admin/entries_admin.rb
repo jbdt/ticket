@@ -31,12 +31,7 @@ Trestle.resource(:entries) do
     def show
       entry = Entry.find(params[:id])
 
-      if current_user.admin? || entry.user_id == current_user.id
-        @entry = entry
-      else
-        flash[:error] = "You are not authorized to view this entry."
-        redirect_to entries_admin_index_path
-      end
+      @entry = entry
     end
 
     def cancel

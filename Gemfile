@@ -67,7 +67,6 @@ gem 'dotenv-rails'
 gem 'trestle', '~> 0.9.8'
 gem 'trestle-auth'
 gem 'trestle-search'
-gem 'trestle-sidekiq'
 
 gem 'chartkick'
 gem 'groupdate'

@@ -1,0 +1,136 @@
+<div class="row">
+  <!-- Sección principal -->
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h2>Scan Tickets</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="ticketCode">Scan a QR code to retrieve ticket details:</label>
+          <input type="text" id="ticketCode" class="form-control" placeholder="Scan here..." autofocus>
+        </div>
+
+        <h3 class="mt-3"><%= @scanned_code %></h3>
+
+        <% if @entry %>
+          <div class="mt-4">
+            <h4>Scanner Status</h4>
+            <% if @entry.scanned.count == 1 %>
+              <div class="alert alert-success text-center" style="font-size: 1.5rem; font-weight: bold;">
+                ✅ First scan! Ticket is valid.
+              </div>
+            <% else %>
+              <div class="alert alert-warning text-center" style="font-size: 1.5rem; font-weight: bold;">
+                ⚠️ Attention! This code has been scanned before.
+                <br>Last scan at: <%= Time.parse(@entry.scanned[-2]).strftime("%H:%M:%S") %>
+              </div>
+            <% end %>
+            <% if !@entry.paid %>
+              <div class="alert alert-danger text-center mt-2" style="font-size: 1.2rem; font-weight: bold;">
+                ❌ Ticket not paid! Attendee must show proof of payment.
+              </div>
+              <% end %>
+
+            <h4>Ticket Details</h4>
+            <div><strong>Entry Type:</strong> 
+              <%= {
+                "general" => "🎟️ General",
+                "vip" => "😎 VIP / Sponsor",
+                "nomad" => "💻 Nomad",
+                "premium" => "⭐ Premium",
+                "furama" => "🛎️ Furama"
+              }[@entry.entry_type] || @entry.entry_type %>
+            </div>
+            <div>
+              <strong>Paid:</strong> 
+              <% if @entry.paid %>
+                <span class="text-success fw-bold">✅ Paid</span>
+              <% else %>
+                <span class="text-danger fw-bold">❌ Not Paid</span>
+              <% end %>
+            </div>
+            <div><strong>Name:</strong> <%= @entry.name || "N/A" %></div>
+            <div><strong>Email:</strong> <%= @entry.email || "N/A" %></div>
+            <div><strong>Phone:</strong> <%= @entry.phone || "N/A" %></div>
+          </div>
+        <% elsif @scanned_code.present? %>
+          <div class="alert alert-danger mt-4">No entry found for this code.</div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Columna de historial de escaneos -->
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-header">
+        <h3>Scan History</h3>
+      </div>
+      <div class="card-body">
+        <% if @entry && @entry.scanned.present? %>
+          <ul class="list-group">
+            <% @entry.scanned.reverse.each do |scan_time| %>
+              <li class="list-group-item">📅 <%= Time.parse(scan_time).strftime("%H:%M:%S") %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>No scans recorded.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar con estadísticas -->
+  <div class="col-md-3">
+    <div class="card position-sticky" style="top: 20px;">
+      <div class="card-header">
+        <h3>Scan Statistics</h3>
+      </div>
+      <div class="card-body">
+        <% scan_counts = Entry.where(redeemed: true).group(:entry_type).count %>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Scanned</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% scan_counts.each do |type, count| %>
+              <tr>
+                <td><%= {
+                  "general" => "🎟️ General",
+                  "vip" => "😎 VIP / Sponsor",
+                  "nomad" => "💻 Nomad",
+                  "premium" => "⭐ Premium",
+                  "furama" => "🛎️ Furama"
+                }[type] || type %></td>
+                <td><%= count %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById("ticketCode").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); 
+
+    let inputField = event.target;
+    let code = inputField.value.trim();
+
+    if (code) {
+      setTimeout(() => {
+        window.location.href = `/a/scan?code=${encodeURIComponent(code)}`;
+      }, 500);
+    }
+
+    inputField.value = "";
+  }
+});
+</script>

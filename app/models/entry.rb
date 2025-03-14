@@ -8,7 +8,10 @@
 #  email              :string
 #  entry_type         :string           not null
 #  name               :string
+#  paid               :boolean          default(TRUE)
 #  phone              :string
+#  redeemed           :boolean
+#  scanned            :json
 #  status             :string           default("created"), not null
 #  ticket_number      :integer
 #  user_ticket_number :integer
@@ -38,9 +41,13 @@ class Entry < ApplicationRecord
 
   # before_validation :assign_ticket_numbers, :generate_code
   before_save :update_status_to_sold_if_needed
+  before_save :set_redeemed
+
   after_create :generate_ticket, if: :created?
 
   scope :ordered_by_creation_date, -> { order(created_at: :asc) }
+
+  serialize :scanned, Array
 
   def qr_code
     RQRCode::QRCode.new(code)
@@ -50,6 +57,9 @@ class Entry < ApplicationRecord
     GenerateTicketJob.perform_later(id)
   end
 
+  def add_scan
+    update(scanned: scanned.push(Time.current.iso8601))
+  end
 
   private
 
@@ -80,5 +90,9 @@ class Entry < ApplicationRecord
     if status == "created" && name.present? && phone.present? && email.present?
       self.status = "sold"
     end
+  end
+
+  def set_redeemed
+    self.redeemed = scanned.present? && scanned.any?
   end
 end

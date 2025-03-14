@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_02_080000) do
+ActiveRecord::Schema.define(version: 2025_03_14_081141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(version: 2025_01_02_080000) do
     t.string "status", default: "created", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.json "scanned", default: []
+    t.boolean "redeemed"
+    t.boolean "paid", default: true
     t.index ["code"], name: "index_entries_on_code", unique: true
     t.index ["user_id"], name: "index_entries_on_user_id"
   end

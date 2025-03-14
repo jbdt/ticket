@@ -8,7 +8,10 @@
 #  email              :string
 #  entry_type         :string           not null
 #  name               :string
+#  paid               :boolean          default(TRUE)
 #  phone              :string
+#  redeemed           :boolean
+#  scanned            :json
 #  status             :string           default("created"), not null
 #  ticket_number      :integer
 #  user_ticket_number :integer

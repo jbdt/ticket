@@ -268,10 +268,6 @@ GEM
       trestle (~> 0.9.0, >= 0.9.3)
     trestle-search (0.4.3)
       trestle (~> 0.9.0, >= 0.9.3)
-    trestle-sidekiq (0.1.2)
-      sidekiq
-      trestle (~> 0.8)
-      trestle-auth (~> 0.2, >= 0.2.3)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -333,7 +329,6 @@ DEPENDENCIES
   trestle (~> 0.9.8)
   trestle-auth
   trestle-search
-  trestle-sidekiq
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 4.1.0)
