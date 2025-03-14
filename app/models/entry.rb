@@ -36,7 +36,7 @@ class Entry < ApplicationRecord
   validates :ticket_number, uniqueness: true
   validates :user_ticket_number, uniqueness: { scope: :user_id }
 
-  before_validation :assign_ticket_numbers, :generate_code
+  # before_validation :assign_ticket_numbers, :generate_code
   before_save :update_status_to_sold_if_needed
   after_create :generate_ticket, if: :created?
 
