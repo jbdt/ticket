@@ -61,7 +61,6 @@
     </div>
   </div>
 
-  <!-- Columna de historial de escaneos -->
   <div class="col-md-3">
     <div class="card">
       <div class="card-header">
@@ -81,7 +80,6 @@
     </div>
   </div>
 
-  <!-- Sidebar con estadísticas -->
   <div class="col-md-3">
     <div class="card position-sticky" style="top: 20px;">
       <div class="card-header">
@@ -89,24 +87,29 @@
       </div>
       <div class="card-body">
         <% scan_counts = Entry.where(redeemed: true).group(:entry_type).count %>
+        <% total_counts = Entry.group(:entry_type).count %>
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>Type</th>
               <th>Scanned</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
-            <% scan_counts.each do |type, count| %>
+            <% total_counts.each do |type, total| %>
               <tr>
-                <td><%= {
-                  "general" => "🎟️ General",
-                  "vip" => "😎 VIP / Sponsor",
-                  "nomad" => "💻 Nomad",
-                  "premium" => "⭐ Premium",
-                  "furama" => "🛎️ Furama"
-                }[type] || type %></td>
-                <td><%= count %></td>
+                <td>
+                  <%= {
+                    "general" => "🎟️ General",
+                    "vip" => "😎 VIP / Sponsor",
+                    "nomad" => "💻 Nomad",
+                    "premium" => "⭐ Premium",
+                    "furama" => "🛎️ Furama"
+                  }[type] || type %>
+                </td>
+                <td><%= scan_counts[type] || 0 %></td>
+                <td><%= total %></td>
               </tr>
             <% end %>
           </tbody>
