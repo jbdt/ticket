@@ -144,6 +144,10 @@ Trestle.resource(:entries) do
                   ], '<br />'.html_safe)
       end
     end
+    column :scanned, sort: false do |entry|
+      entry.scanned.any?
+    end
+    column :paid
     column :updated_at
     actions do |toolbar, instance, admin|
       entry = instance
