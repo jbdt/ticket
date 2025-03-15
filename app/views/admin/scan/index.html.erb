@@ -14,46 +14,37 @@
         <h3 class="mt-3"><%= @scanned_code %></h3>
 
         <% if @entry %>
-          <div class="mt-4">
-            <h4>Scanner Status</h4>
-            <% if @entry.scanned.count == 1 %>
-              <div class="alert alert-success text-center" style="font-size: 1.5rem; font-weight: bold;">
-                ✅ First scan! Ticket is valid.
-              </div>
-            <% else %>
-              <div class="alert alert-warning text-center" style="font-size: 1.5rem; font-weight: bold;">
-                ⚠️ Attention! This code has been scanned before.
-                <br>Last scan at: <%= Time.parse(@entry.scanned[-2]).strftime("%H:%M:%S") %>
-              </div>
-            <% end %>
-            <% if !@entry.paid %>
-              <div class="alert alert-danger text-center mt-2" style="font-size: 1.2rem; font-weight: bold;">
-                ❌ Ticket not paid! Attendee must show proof of payment.
-              </div>
-              <% end %>
+          <% early_bird_codes = [
+          "0001-GEN-49-DAN-0001", "0002-GEN-63-DAN-0002", "0003-GEN-9-DAN-0003", "0004-GEN-27-DAN-0004",
+          "0005-GEN-16-DAN-0005", "0006-GEN-85-DAN-0006", "0007-GEN-20-DAN-0007", "0008-GEN-70-DAN-0008"
+        ] %>
 
-            <h4>Ticket Details</h4>
-            <div><strong>Entry Type:</strong> 
-              <%= {
-                "general" => "🎟️ General",
-                "vip" => "😎 VIP / Sponsor",
-                "nomad" => "💻 Nomad",
-                "premium" => "⭐ Premium",
-                "furama" => "🛎️ Furama"
-              }[@entry.entry_type] || @entry.entry_type %>
+        <div class="mt-4">
+          <h4>Scanner Status</h4>
+
+          <% if @entry.scanned.count == 1 %>
+            <div class="alert alert-success text-center" style="font-size: 1.5rem; font-weight: bold;">
+              ✅ First scan! Ticket is valid.
             </div>
-            <div>
-              <strong>Paid:</strong> 
-              <% if @entry.paid %>
-                <span class="text-success fw-bold">✅ Paid</span>
-              <% else %>
-                <span class="text-danger fw-bold">❌ Not Paid</span>
-              <% end %>
+          <% else %>
+            <div class="alert alert-warning text-center" style="font-size: 1.5rem; font-weight: bold;">
+              ⚠️ Attention! This code has been scanned before.
+              <br>Last scan at: <%= Time.parse(@entry.scanned[-2]).strftime("%H:%M:%S") %>
             </div>
-            <div><strong>Name:</strong> <%= @entry.name || "N/A" %></div>
-            <div><strong>Email:</strong> <%= @entry.email || "N/A" %></div>
-            <div><strong>Phone:</strong> <%= @entry.phone || "N/A" %></div>
-          </div>
+          <% end %>
+
+          <% if !@entry.paid %>
+            <div class="alert alert-danger text-center mt-2" style="font-size: 1.2rem; font-weight: bold;">
+              ❌ Ticket not paid! Attendee must show proof of payment.
+            </div>
+          <% end %>
+
+          <% if early_bird_codes.include?(@entry.code) %>
+            <div class="alert alert-warning text-center mt-2" style="font-size: 1.5rem; font-weight: bold;">
+              🎟️ This is an <strong>Early Bird</strong> ticket!
+            </div>
+          <% end %>
+        </div>
         <% elsif @scanned_code.present? %>
           <div class="alert alert-danger mt-4">No entry found for this code.</div>
         <% end %>
